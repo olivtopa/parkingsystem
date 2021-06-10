@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.junit.jupiter.api.Assertions;
 
 import com.parkit.parkingsystem.dao.ParkingSpotDAO;
 import com.parkit.parkingsystem.dao.TicketDAO;
@@ -57,10 +58,12 @@ public class ParkingDataBaseIT {
         ParkingService parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
         parkingService.processIncomingVehicle();
         //TODO: check that a ticket is actualy saved in DB and Parking table is updated with availability
-        verify(dataBaseTestConfig).saveTicket(Ticket ticket);
-        verify(dataBaseTestConfig).updateParking(ParkingSpot parkingSpot);
-        assertThat(ps.execute()).isEqualTo(true);
-        assertThat(updateRowCount).isEqualTo(1);
+        
+        /*verify(ParkingService).processIncomingVehicle();
+        verify(dataBaseTestConfig).updateParking(ParkingSpot parkingSpot);*/
+       
+        assertTrue("ABCDEF" == ticketDAO.getTicket(vehicleRegNumber));
+        assertTrue(true,(ticketDAO.saveTicket(ticket)));
        
     }
 
