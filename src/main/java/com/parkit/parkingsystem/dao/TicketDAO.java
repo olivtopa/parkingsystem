@@ -87,24 +87,25 @@ public class TicketDAO {
 		return false;
 	}
 
-	public Ticket countTickets(String vehicleRegNumber) {
+	public int countTickets(String vehicleRegNumber) {
         Connection con = null;
-        Ticket ticket = null;
         try {
             con = dataBaseConfig.getConnection();
             PreparedStatement ps = con.prepareStatement(DBConstants.COUNT_TICKETS);
             //VEHICLE_REG_NUMBER)
             ps.setString(1,vehicleRegNumber);
             ResultSet rs = ps.executeQuery();
-            if(rs.next()){rs.getInt(1);
+            int resultat = 0;
+            if(rs.next()){resultat = rs.getInt(1);
             }
             dataBaseConfig.closeResultSet(rs);
             dataBaseConfig.closePreparedStatement(ps);
+            return resultat;
         }catch (Exception ex){
             logger.error("Error fetching next available slot",ex);
         }finally {
             dataBaseConfig.closeConnection(con);
-            return ticket;
-        }
+            
+        }return 0;
 	}
 }
