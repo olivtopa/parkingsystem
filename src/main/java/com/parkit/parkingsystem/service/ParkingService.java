@@ -124,13 +124,14 @@ public class ParkingService {
     public boolean checkVehicleRegNumberAllreadyExist(String vehicleRegNumber){
        	if(ticketDAO.getTicket(vehicleRegNumber) != null) {
        		System.out.println("Welcome back! As a recurring user of our parking lot, you'll benefit from a 5% discount");
-    	}return true;
+       		return true;
+    	}else return false;
     }
 
     
     public boolean checkCountTickets(String vehicleRegNumber){
     	int nbreTickets = ticketDAO.countTickets(vehicleRegNumber);
-    	if(nbreTickets>1) {}return true;
+    	if(nbreTickets>1){return true;}else return false;
 		
     }
     	
