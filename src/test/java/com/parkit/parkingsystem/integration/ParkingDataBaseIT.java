@@ -1,6 +1,9 @@
 package com.parkit.parkingsystem.integration;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
+
+import java.util.Date;
 
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
@@ -16,7 +19,9 @@ import com.parkit.parkingsystem.dao.ParkingSpotDAO;
 import com.parkit.parkingsystem.dao.TicketDAO;
 import com.parkit.parkingsystem.integration.config.DataBaseTestConfig;
 import com.parkit.parkingsystem.integration.service.DataBasePrepareService;
+import com.parkit.parkingsystem.model.ParkingSpot;
 import com.parkit.parkingsystem.model.Ticket;
+import com.parkit.parkingsystem.service.FareCalculatorService;
 import com.parkit.parkingsystem.service.ParkingService;
 import com.parkit.parkingsystem.util.InputReaderUtil;
 
@@ -87,7 +92,21 @@ public class ParkingDataBaseIT {
 
 		Ticket ticket = ticketDAO.getTicket("ABCDSF");
 		Assertions.assertNull(ticket);
-
 	}
-
+	
+	@Test
+	public void testCountTickets() {
+		testParkingLotExit();
+		testParkingLotExit();
+		int nbreTickets = ticketDAO.countTickets("ABCDEF");
+		Assertions.assertEquals(2,nbreTickets);
+	}
+	
+	@Test
+	public void testDiscount() { 
+		testCountTickets();
+		ParkingService parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
+		boolean discount = parkingService.checkCountTickets("ABCDEF");
+		Assertions.assertTrue(discount);
+	}
 }
