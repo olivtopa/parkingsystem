@@ -1,9 +1,6 @@
 package com.parkit.parkingsystem.integration;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
-
-import java.util.Date;
 
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
@@ -19,9 +16,7 @@ import com.parkit.parkingsystem.dao.ParkingSpotDAO;
 import com.parkit.parkingsystem.dao.TicketDAO;
 import com.parkit.parkingsystem.integration.config.DataBaseTestConfig;
 import com.parkit.parkingsystem.integration.service.DataBasePrepareService;
-import com.parkit.parkingsystem.model.ParkingSpot;
 import com.parkit.parkingsystem.model.Ticket;
-import com.parkit.parkingsystem.service.FareCalculatorService;
 import com.parkit.parkingsystem.service.ParkingService;
 import com.parkit.parkingsystem.util.InputReaderUtil;
 
@@ -47,7 +42,7 @@ public class ParkingDataBaseIT {
 
 	@BeforeEach
 	private void setUpPerTest() throws Exception {
-		when(inputReaderUtil.readSelection()).thenReturn(1); /* fortement lié à parkingService.getVehiculeType */
+		when(inputReaderUtil.readSelection()).thenReturn(1); 
 		when(inputReaderUtil.readVehicleRegistrationNumber()).thenReturn("ABCDEF");
 		dataBasePrepareService.clearDataBaseEntries();
 	}
@@ -94,17 +89,24 @@ public class ParkingDataBaseIT {
 		Assertions.assertNull(ticket);
 	}
 	
+	public void recurringVehicle() {
+		ParkingService parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
+		parkingService.processIncomingVehicle();
+		parkingService.processExitingVehicle();
+		parkingService.processIncomingVehicle();
+		parkingService.processExitingVehicle();
+	}
+	
 	@Test
 	public void testCountTickets() {
-		testParkingLotExit();
-		testParkingLotExit();
+		recurringVehicle();
 		int nbreTickets = ticketDAO.countTickets("ABCDEF");
 		Assertions.assertEquals(2,nbreTickets);
 	}
 	
 	@Test
 	public void testDiscount() { 
-		testCountTickets();
+		recurringVehicle();
 		ParkingService parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
 		boolean discount = parkingService.checkCountTickets("ABCDEF");
 		Assertions.assertTrue(discount);
