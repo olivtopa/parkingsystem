@@ -167,7 +167,7 @@ public class FareCalculatorServiceTest {
 	}
 
 	@Test
-	public void calculateFareRecurrentVehicle() {
+	public void calculateFareRecurrentVehicle() { // Parking fare for a recurrent vehicle
 		Date inTime = new Date();
 		inTime.setTime(System.currentTimeMillis() - (5 * 60 * 60 * 1000));
 		Date outTime = new Date();
