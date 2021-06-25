@@ -42,7 +42,7 @@ public class ParkingDataBaseIT {
 
 	@BeforeEach
 	private void setUpPerTest() throws Exception {
-		when(inputReaderUtil.readSelection()).thenReturn(1); 
+		when(inputReaderUtil.readSelection()).thenReturn(1);
 		when(inputReaderUtil.readVehicleRegistrationNumber()).thenReturn("ABCDEF");
 		dataBasePrepareService.clearDataBaseEntries();
 	}
@@ -56,8 +56,6 @@ public class ParkingDataBaseIT {
 	public void testParkingACar() {
 		ParkingService parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
 		parkingService.processIncomingVehicle();
-		// TODO: check that a ticket is actualy saved in DB and Parking table is updated
-		// with availability
 
 		Ticket ticket = ticketDAO.getTicket("ABCDEF");
 
@@ -71,8 +69,6 @@ public class ParkingDataBaseIT {
 		testParkingACar();
 		ParkingService parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
 		parkingService.processExitingVehicle();
-		// TODO: check that the fare generated and out time are populated correctly in
-		// the database
 
 		Ticket ticket = ticketDAO.getTicket("ABCDEF");
 
@@ -88,7 +84,7 @@ public class ParkingDataBaseIT {
 		Ticket ticket = ticketDAO.getTicket("ABCDSF");
 		Assertions.assertNull(ticket);
 	}
-	
+
 	public void recurringVehicle() {
 		ParkingService parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
 		parkingService.processIncomingVehicle();
@@ -96,16 +92,16 @@ public class ParkingDataBaseIT {
 		parkingService.processIncomingVehicle();
 		parkingService.processExitingVehicle();
 	}
-	
+
 	@Test
 	public void testCountTickets() {
 		recurringVehicle();
 		int nbreTickets = ticketDAO.countTickets("ABCDEF");
-		Assertions.assertEquals(2,nbreTickets);
+		Assertions.assertEquals(2, nbreTickets);
 	}
-	
+
 	@Test
-	public void testDiscount() { 
+	public void testDiscount() {
 		recurringVehicle();
 		ParkingService parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
 		boolean discount = parkingService.checkCountTickets("ABCDEF");
