@@ -4,6 +4,7 @@ import com.parkit.parkingsystem.config.DataBaseConfig;
 import com.parkit.parkingsystem.constants.DBConstants;
 import com.parkit.parkingsystem.constants.ParkingType;
 import com.parkit.parkingsystem.model.ParkingSpot;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -29,12 +30,12 @@ public class ParkingSpotDAO {
             if(rs.next()){
                 result = rs.getInt(1);
             }
-            dataBaseConfig.closeResultSet(rs);
-            dataBaseConfig.closePreparedStatement(ps);
-        }catch (Exception ex){
+            
+            }catch (Exception ex){
             logger.error("Error fetching next available slot",ex);
         }finally {
         	dataBaseConfig.closePreparedStatement(ps);
+        	dataBaseConfig.closeResultSet(rs);
         }
         return result;
     }
